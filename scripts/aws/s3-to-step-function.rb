@@ -8,7 +8,7 @@ require 'aws-sdk-states'
 
 options = {}
 parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: submit-to-step-function.rb [options]'
+  opts.banner = "Usage: #{$PROGRAM_NAME} [options]"
 
   opts.on('-b', '--bucket BUCKET', 'The name of the S3 bucket.') do |bucket|
     options[:bucket_name] = bucket
