@@ -342,7 +342,7 @@ def parse_command_line(cli_args, env_vars, sub_commands=None):
             sub_command_parsers[sub_command_name] = sub_command_parser
 
     (opts, args) = parser.parse_known_args(cli_args)
-    return opts, args, env_vars
+    return opts, args, env_vars, parser
 
 
 def main():
@@ -355,7 +355,10 @@ def main():
         # 'transcribe-translate': EnvoiTranscribeTranslateCommand,
     }
 
-    opts, args, env_vars = parse_command_line(cli_args, env_vars, sub_commands)
+    opts, args, env_vars, parser = parse_command_line(cli_args, env_vars, sub_commands)
+    if opts.command is None:
+        parser.print_help()
+        return 1
 
     # We create a new handler for the root logger, so that we can get
     # setLevel to set the desired log level.
