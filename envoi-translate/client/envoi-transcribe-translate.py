@@ -28,7 +28,7 @@ class EnvoiTranscribeTranslateCreateCommand:
         self.opts = opts
 
     def run(self, opts=None):
-        if opts is not None:
+        if opts is None:
             opts = self.opts
 
         run_input = build_run_input(opts)
@@ -61,7 +61,7 @@ class EnvoiTranscribeTranslateCreateCommand:
                             default='en',
                             help='The language of the source file.')
         parser.add_argument('-l', '--translation-language', dest='translation_languages',
-                            action="append", nargs="+",
+                            nargs="+",
                             help='The languages to translate to.')
         parser.add_argument("--log-level", dest="log_level",
                             default="WARNING",
@@ -320,7 +320,7 @@ def process_transcription_language(language_code, output_bucket_name, file_name_
 def get_translation_languages():
     client = boto3.client('translate')
     response = client.list_languages(MaxResults=500)
-    return response['Languages'].map(lambda language: language['LanguageCode'])
+    return [language['LanguageCode'] for language in response['Languages']]
 
 
 def parse_command_line(cli_args, env_vars, sub_commands=None):
