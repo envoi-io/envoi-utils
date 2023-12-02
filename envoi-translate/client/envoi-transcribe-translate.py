@@ -60,7 +60,7 @@ class EnvoiTranscribeTranslateCreateCommand:
         parser.add_argument('--source-language', dest='source_language',
                             default='en',
                             help='The language of the source file.')
-        parser.add_argument('-l', '--translation-language', dest='translation_languages',
+        parser.add_argument('-l', '--translation-languages', dest='translation_languages',
                             nargs="+",
                             help='The languages to translate to.')
         parser.add_argument("--log-level", dest="log_level",
