@@ -54,7 +54,7 @@ class EnvoiTranscribeTranslateCreateCommand:
         parser.add_argument('--output-bucket-name', dest='output_bucket_name',
                             required=True,
                             help='The S3 URI of the output file.')
-        parser.add_argument('--state-machine-arn', dest='state_machine_arn'
+        parser.add_argument('--state-machine-arn', dest='state_machine_arn',
                             help='The ARN of the state machine to run.')
         parser.add_argument('--source-language', dest='source_language',
                             default='en',
@@ -120,8 +120,6 @@ class EnvoiTranscribeTranslateDescribeCommand:
 
         else:
             print(json.dumps(json.loads(CustomJsonEncoder().encode(description)), indent=2))
-
-
 
     @classmethod
     def init_parser(cls, subparsers=None, command_name="describe"):
@@ -293,7 +291,7 @@ def build_run_input(opts):
 def run_step_function(state_machine_arn, run_input):
     logger.debug(f"Running state machine: {state_machine_arn} {run_input}")
     run_input_json: str = json.dumps(run_input)
-    execution_arn = StateMachine().start(state_machine_arn, run_input_json)
+    execution_arn = StateMachine(state_machine_arn=state_machine_arn).start(run_input_json)
     return execution_arn
 
 
@@ -334,6 +332,7 @@ def parse_command_line(cli_args, env_vars, sub_commands=None):
     if sub_commands is not None:
         sub_command_parsers = {}
         sub_parsers = parser.add_subparsers(dest='command')
+        sub_parsers.required = True
 
         for sub_command_name, sub_command_handler in sub_commands.items():
             sub_command_parser = sub_command_handler.init_parser(sub_parsers, command_name=sub_command_name)
@@ -355,9 +354,6 @@ def main():
     }
 
     opts, args, env_vars, parser = parse_command_line(cli_args, env_vars, sub_commands)
-    if opts.command is None:
-        parser.print_help()
-        return 1
 
     # We create a new handler for the root logger, so that we can get
     # setLevel to set the desired log level.
@@ -374,4 +370,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    exit_code = main()
+    sys.exit(exit_code)
