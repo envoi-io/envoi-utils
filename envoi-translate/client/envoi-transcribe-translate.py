@@ -54,8 +54,7 @@ class EnvoiTranscribeTranslateCreateCommand:
         parser.add_argument('--output-bucket-name', dest='output_bucket_name',
                             required=True,
                             help='The S3 URI of the output file.')
-        parser.add_argument('--state-machine-arn', dest='state_machine_arn',
-                            default='arn:aws:states:us-east-1:524540001196:stateMachine:envoi-transcribe',
+        parser.add_argument('--state-machine-arn', dest='state_machine_arn'
                             help='The ARN of the state machine to run.')
         parser.add_argument('--source-language', dest='source_language',
                             default='en',
