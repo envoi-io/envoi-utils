@@ -15,25 +15,16 @@ if [ "$DEPENDENCIES_MET" == false ]; then
 	exit 1
 fi
 
-# export ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX=
+function usage {
+    echo "Usage: $0 <bucket-name-prefix>"
+    echo "Creates the S3 buckets for the Envoi application."
+    echo "bucket-name-prefix: The prefix to use for the bucket names."
+}
 
-# Define the list of commands
-commands=("aws")
-
-# Iterate over the commands and check their availability
-for cmd in "${commands[@]}"; do
-  if ! command -v "$cmd" &>/dev/null; then
-    echo "Error: $cmd is not available."
-		DEPENDENCIES_MET=false
-  fi
-done
-
-if [ "$DEPENDENCIES_MET" == false ]; then
-	exit 1
-fi
+ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX=${1:-$ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}
 
 if [ -z "$ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX" ]; then
-    echo "ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX is not set. Please set it to the desired bucket name prefix."
+    usage
     exit 1
 fi
 
