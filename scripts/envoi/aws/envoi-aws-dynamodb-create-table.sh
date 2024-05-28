@@ -178,7 +178,6 @@ fi
 # # Turn the array into a command and execute it
 # aws_command="${aws_command[@]}"
 
-# # echo "Executing: $aws_command"
-# eval $aws_command
+# ${aws_command[@]}
 
 aws dynamodb create-table $*

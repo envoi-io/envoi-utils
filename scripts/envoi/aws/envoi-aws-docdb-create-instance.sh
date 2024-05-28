@@ -15,57 +15,6 @@ if [ "$DEPENDENCIES_MET" == false ]; then
 	exit 1
 fi
 
-# function usage {
-#   cat <<EOF
-#   Usage: $0 [options]
-
-#   Options:
-#   --help
-#   --db-cluster-identifier
-#   --db-instance-identifier
-#   --availability-zone
-#   --db-instance-class
-#   --engine
-#   --engine-version
-#   --master-username
-#   --master-user-password
-#   --db-subnet-group-name
-#   --backup-retention-period
-#   --db-parameter-group-name
-#   --backup-window
-#   --preferred-maintenance-window
-#   --multi-az
-#   --engine-mode
-#   --skip-final-snapshot
-#   --skip-final-snapshot-identifier
-#   --final-snapshot-identifier
-#   --final-snapshot-retention-period
-#   --final-snapshot-window
-#   --iam-database-authentication-enabled
-#   --iam-database-authentication-username
-#   --iam-database-authentication-password
-#   --iam-database-authentication-database-name
-#   --iam-database-authentication-schema
-#   --iam-database-authentication-table-name
-#   --iam-database-authentication-role-arn
-#   --iam-database-authentication-kms-key-id
-#   --iam-database-authentication-kms-key-arn
-#   --iam-database-authentication-secret-arn
-#   --iam-database-authentication-secret-access-key
-#   --iam-database-authentication-access-key-id
-#   --iam-database-authentication-access-key-secret
-#   --iam-database-authentication-access-key-region
-#   --iam-database-authentication-access-key-service
-#   --iam-database-authentication-access-key-account
-#   --iam-database-authentication-access-key-user
-#   --iam-database-authentication-access-key-session
-#   --iam-database-authentication-access-key-expiration
-#   --iam-database-authentication-access-key-session-token
-#   --iam-database-authentication-access-key-session-expiration
-#   --iam-database-authentication-access-key-session-token-expiration
-# EOF
-# }
-
 function usage {
   cat <<EOF
   Usage: $0 [options]
