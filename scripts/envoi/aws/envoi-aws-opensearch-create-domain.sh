@@ -7,7 +7,7 @@ commands=("aws")
 for cmd in "${commands[@]}"; do
   if ! command -v "$cmd" &>/dev/null; then
     echo "Error: $cmd is not available."
-		DEPENDENCIES_MET=false
+	DEPENDENCIES_MET=false
   fi
 done
 
