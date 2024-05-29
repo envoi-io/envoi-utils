@@ -15,6 +15,17 @@ if [ "$DEPENDENCIES_MET" == false ]; then
 	exit 1
 fi
 
-# Delete OpenSearch Domain
+function usage {
+  echo "Usage: $0 <domain-name>"
+}
 
-aws opensearch delete-domain  --domain-name envoi-analytics
+# Delete OpenSearch Domain
+DOMAIN_NAME=$1
+
+if [ -z "$DOMAIN_NAME" ]
+then
+  usage
+  exit 1
+fi
+
+aws opensearch delete-domain  --domain-name $DOMAIN_NAME

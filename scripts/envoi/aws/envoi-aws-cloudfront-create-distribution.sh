@@ -20,7 +20,7 @@ function usage() {
   exit 1
 }
 
-BUCKET_NAME=$1
+BUCKET_NAME=${1:-$BUCKET_NAME}
 
 if [ -z "${BUCKET_NAME}" ]; then
   usage

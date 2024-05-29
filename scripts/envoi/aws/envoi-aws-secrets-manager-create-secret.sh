@@ -21,7 +21,6 @@ fi
 
 function usage() {
   echo "Usage: $0 <secret-name> <secret-string>"
-  exit 1
 }
 
 while [[ $# -gt 0 ]]
@@ -29,18 +28,25 @@ do
   case "$1" in
     -h|--help)
       usage
+      exit 0
       ;;
     *)
-    secret_name="$1"
-    secret_string="$2"
-    ;;
+      secret_name="$1"
+      secret_string="$2"
+      shift
+      shift
+      ;;
     esac
-    shift
-    ;;
 done
 
+if [ -z "$secret_name" ] || [ -z "$secret_string" ]
+then
+  usage
+  exit 1
+fi
 
- - # I need a one to one map of create-secret arguments as arguments for this script
+
+# I need a one to one map of create-secret arguments as arguments for this script
 # create-secret
 # --name <value>
 # [--client-request-token <value>]
