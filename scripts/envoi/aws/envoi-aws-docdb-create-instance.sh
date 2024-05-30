@@ -24,19 +24,19 @@ function usage {
     Display this help and exit
 
   --db-cluster-identifier
-    Defaults to the value of the DEPLOY_DOCDB_CLUSTER_IDENTIFIER environment variable
+    Defaults to the value of the ENVOI_DOCDB_CLUSTER_IDENTIFIER environment variable
 
   --db-instance-identifier
-    Defaults to the value of the DEPLOY_DOCDB_INSTANCE_IDENTIFIER environment variable
+    Defaults to the value of the ENVOI_DOCDB_INSTANCE_IDENTIFIER environment variable
 
   --availability-zone
-    Defaults to the value of the DEPLOY_DOCDB_AVAILABILITY_ZONE environment variable
+    Defaults to the value of the ENVOI_DOCDB_AVAILABILITY_ZONE environment variable
 
   --db-instance-class
-    Defaults to the value of the DEPLOY_DOCDB_DB_INSTANCE_CLASS environment variable
+    Defaults to the value of the ENVOI_DOCDB_DB_INSTANCE_CLASS environment variable
 
   --engine
-    Can also be set using the DEPLOY_DOCDB_ENGINE environment variable
+    Can also be set using the ENVOI_DOCDB_ENGINE environment variable
     Default: docdb
     
 
@@ -45,10 +45,10 @@ EOF
 
 command_out=(aws docdb create-db-instance)
 
-DEPLOY_DOCDB_ENGINE=${DEPLOY_DOCDB_ENGINE:-docdb}
-# export DB_INSTANCE_IDENTIFIER=${DEPLOY_DOCDB_INSTANCE_IDENTIFIER:-""}
-# export DB_CLUSTER_IDENTIFIER=${DEPLOY_DOCDB_CLUSTER_IDENTIFIER:-""}
-# export DB_INSTANCE_CLASS=${DEPLOY_DOCDB_DB_INSTANCE_CLASS:-""}
+ENVOI_DOCDB_ENGINE=${ENVOI_DOCDB_ENGINE:-"docdb"}
+export DB_INSTANCE_IDENTIFIER=${ENVOI_DOCDB_INSTANCE_IDENTIFIER:-"envoi"}
+export DB_CLUSTER_IDENTIFIER=${ENVOI_DOCDB_CLUSTER_IDENTIFIER:-"envoi"}
+# export DB_INSTANCE_CLASS=${ENVOI_DOCDB_DB_INSTANCE_CLASS:-""}
 
 while [[ $# -gt 0 ]]
 do
@@ -58,31 +58,31 @@ do
       exit 0
       ;;
     --db-cluster-identifier)
-      DEPLOY_DOCDB_CLUSTER_IDENTIFIER=$2
+      ENVOI_DOCDB_CLUSTER_IDENTIFIER=$2
       # argiments_out+=["--db-cluster-identifier" $2]
       shift
       shift
       ;;
     --db-instance-identifier)
-      DEPLOY_DOCDB_INSTANCE_IDENTIFIER=$2
+      ENVOI_DOCDB_INSTANCE_IDENTIFIER=$2
       # argiments_out+=["--db-instance-identifier" $2]
       shift
       shift
       ;;
     --availability-zone)
-      DEPLOY_DOCDB_AVAILABILITY_ZONE=$2
+      ENVOI_DOCDB_AVAILABILITY_ZONE=$2
       # command_out+=["--availability-zone" $2]
       shift
       shift
       ;;
     --db-instance-class)
-      DEPLOY_DOCDB_DB_INSTANCE_CLASS=$2
+      ENVOI_DOCDB_DB_INSTANCE_CLASS=$2
       # command_out+=["--db-instance-class" $2]
       shift
       shift
       ;;
     --engine)
-      DEPLOY_DOCDB_ENGINE=$2
+      ENVOI_DOCDB_ENGINE=$2
       # command_out+=["--engine" $2]
       shift
       shift
@@ -95,33 +95,24 @@ do
 done
 
 # If set
-if [ -n "$DEPLOY_DOCDB_CLUSTER_IDENTIFIER" ]; then
-  command_out+=("--db-cluster-identifier" $DEPLOY_DOCDB_CLUSTER_IDENTIFIER)
+if [ -n "$ENVOI_DOCDB_CLUSTER_IDENTIFIER" ]; then
+  command_out+=("--db-cluster-identifier" $ENVOI_DOCDB_CLUSTER_IDENTIFIER)
 fi
 
-if [ -n "$DEPLOY_DOCDB_INSTANCE_IDENTIFIER" ]; then
-  command_out+=("--db-instance-identifier" $DEPLOY_DOCDB_INSTANCE_IDENTIFIER)
+if [ -n "$ENVOI_DOCDB_INSTANCE_IDENTIFIER" ]; then
+  command_out+=("--db-instance-identifier" $ENVOI_DOCDB_INSTANCE_IDENTIFIER)
 fi
 
-if [ -n "$DEPLOY_DOCDB_AVAILABILITY_ZONE" ]; then
-  command_out+=("--availability-zone" $DEPLOY_DOCDB_AVAILABILITY_ZONE)
+if [ -n "$ENVOI_DOCDB_AVAILABILITY_ZONE" ]; then
+  command_out+=("--availability-zone" $ENVOI_DOCDB_AVAILABILITY_ZONE)
 fi
 
-if [ -n "$DEPLOY_DOCDB_DB_INSTANCE_CLASS" ]; then
-  command_out+=("--db-instance-class" $DEPLOY_DOCDB_DB_INSTANCE)
+if [ -n "$ENVOI_DOCDB_DB_INSTANCE_CLASS" ]; then
+  command_out+=("--db-instance-class" $ENVOI_DOCDB_DB_INSTANCE)
 fi
 
-if [ -n "$DEPLOY_DOCDB_ENGINE" ]; then
-  command_out+=("--engine" "$DEPLOY_DOCDB_ENGINE")
+if [ -n "$ENVOI_DOCDB_ENGINE" ]; then
+  command_out+=("--engine" "$ENVOI_DOCDB_ENGINE")
 fi
-
-# Create Cluster Instance
-# export DEPLOYMENT_DOCDB_CREATE_INSTANCE_OUTPUT=$(aws docdb create-db-instance \
-# --engine docdb --db-cluster-identifier DEPLOY_DOCDB_CLUSTER_IDENTIFIER 
-# --db-instance-identifier $DEPLOY_DOCDB_INSTANCE_IDENTIFIER 
-# --availability-zone $DEPLOY_DOCDB_AVAILABILITY_ZONE 
-# --db-instance-class $DEPLOY_DOCDB_DB_INSTANCE_CLASS)
-
-# echo $DEPLOYMENT_DOCDB_CREATE_INSTANCE_OUTPUT
 
 ${command_out[@]}

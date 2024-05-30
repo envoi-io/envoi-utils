@@ -16,10 +16,10 @@ if [ "$DEPENDENCIES_MET" == false ]; then
 fi
 
 # Defaults
-export VPC_NAME=${VPC_NAME:-envoi-distribution-cloud}
-export VPC_TAGS="Key=Name,Value=${VPC_NAME}"
-export VPC_CIDR_PREFIX=${VPC_CIDR_PREFIX:-10.10.1}
-export VPC_CIDR="${VPC_CIDR_PREFIX}.0/24"
+export ENVOI_VPC_NAME=${ENVOI_VPC_NAME:-envoi-distribution-cloud}
+export ENVOI_VPC_TAGS="Key=Name,Value=${ENVOI_VPC_NAME}"
+export ENVOI_VPC_CIDR_PREFIX=${ENVOI_VPC_CIDR_PREFIX:-10.10.1}
+export ENVOI_VPC_CIDR="${ENVOI_VPC_CIDR_PREFIX}.0/24"
 
 function log {
   echo $1
