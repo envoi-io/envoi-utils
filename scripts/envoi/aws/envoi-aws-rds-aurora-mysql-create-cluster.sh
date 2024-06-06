@@ -1,40 +1,41 @@
 #!/usr/bin/env bash
 
-# Define the list of commands
-commands=("aws")
+log() {
+  echo "$1" >&2
+}
+
+verbose() {
+  [[ "$VERBOSE" == "true" ]] && echo -e "\033[0;33m$1\033[0m" >&2 # yellow
+}
+
+# Define the list of dependencies
+dependencies=("aws")
 
 # Iterate over the commands and check their availability
-for cmd in "${commands[@]}"; do
+for cmd in "${dependencies[@]}"; do
   if ! command -v "$cmd" &>/dev/null; then
-    echo "Error: $cmd is not available."
-		DEPENDENCIES_MET=false
+    echo "Error: $cmd command was not found."
+		all_dependencies_met=false
   fi
 done
 
-if [ "$DEPENDENCIES_MET" == false ]; then
+if [ "$all_dependencies_met" == false ]; then
 	exit 1
 fi
 
-ENVOI_AMYSQL_MASTER_USERNAME=${ENVOI_AMYSQL_MASTER_USERNAME:-admin}
+ENVOI_AMYSQL_MASTER_USERNAME=${ENVOI_AMYSQL_MASTER_USERNAME:-dbadmin}
 ENVOI_AMYSQL_MASTER_PASSWORD=${ENVOI_AMYSQL_MASTER_PASSWORD}
-ENVOI_AMYSQL_CLUSTER_IDENTIFIER=${ENVOI_AMYSQL_CLUSTER_IDENTIFIER:-sample-cluster}
-ENVOI_AMYSQL_INSTANCE_IDENTIFIER=${ENVOI_AMYSQL_INSTANCE_IDENTIFIER:-sample-instance}
+ENVOI_AMYSQL_CLUSTER_IDENTIFIER=${ENVOI_AMYSQL_CLUSTER_IDENTIFIER:-envoi}
+ENVOI_AMYSQL_INSTANCE_IDENTIFIER=${ENVOI_AMYSQL_INSTANCE_IDENTIFIER:-envoi}
 ENVOI_AMYSQL_SUBNET_GROUP_NAME=${ENVOI_AMYSQL_SUBNET_GROUP_NAME:-default}
 # ENVOI_AMYSQL_SECURITY_GROUP_IDS=${ENVOI_AMYSQL_SECURITY_GROUP_IDS
-ENVOI_AMYSQL_PARAMETER_GROUP_NAME=${ENVOI_AMYSQL_PARAMETER_GROUP_NAME:-default}
+ENVOI_AMYSQL_PARAMETER_GROUP_NAME=${ENVOI_AMYSQL_PARAMETER_GROUP_NAME:-envoi-aurora-mysql8-0-default}
 ENVOI_AMYSQL_ENGINE=${ENVOI_AMYSQL_ENGINE:-aurora-mysql}
-ENVOI_AMYSQL_ENGINE_VERSION=${ENVOI_AMYSQL_ENGINE_VERSION:-5.7}
+ENVOI_AMYSQL_ENGINE_VERSION=${ENVOI_AMYSQL_ENGINE_VERSION:-8.0}
 
+command_out=(aws rds create-db-cluster --output json  --no-cli-pager)
 
-if [ -z "$ENVOI_AMYSQL_MASTER_PASSWORD" ]; then
-  echo "Error: ENVOI_AMYSQL_MASTER_PASSWORD is not set."
-  exit 1
-fi
-
-command_out=(aws rds create-db-cluster)
-
-while [[ $# -gt 0 ]]
-do
+while [[ $# -gt 0 ]]; do
   case "$1" in
     --db-cluster-identifier)
       shift
@@ -71,7 +72,7 @@ do
       ENVOI_AMYSQL_SECURITY_GROUP_IDS=$1
       shift
       ;;
-      --parameter-group-name)
+      --db-parameter-group-name)
       shift
       ENVOI_AMYSQL_PARAMETER_GROUP_NAME=$1
       shift
@@ -88,12 +89,15 @@ do
   esac
 done      
 
-
 if [ -z "$ENVOI_AMYSQL_MASTER_PASSWORD" ]; then
-  echo "Error: ENVOI_AMYSQL_MASTER_PASSWORD is not set."
+  echo "Error: ENVOI_AMYSQL_MASTER_PASSWORD must be set or --master-user-password is required."
   exit 1
 fi
 
+if [ -z "$ENVOI_AMYSQL_MASTER_PASSWORD" ]; then
+  echo "Error: ENVOI_AMYSQL_MASTER_PASSWORD must be set or --master-user-password is required."
+  exit 1
+fi
 
 if [ -n "$ENVOI_AMYSQL_MASTER_PASSWORD" ]; then
   command_out+=("--master-user-password" "$ENVOI_AMYSQL_MASTER_PASSWORD")
@@ -124,9 +128,8 @@ if [ -n "$ENVOI_AMYSQL_SECURITY_GROUP_IDS" ]; then
 fi
 
 if [ -n "$ENVOI_AMYSQL_PARAMETER_GROUP_NAME" ]; then
-  command_out+=("--db-parameter-group-name" "$ENVOI_AMYSQL_PARAMETER_GROUP_NAME")
+  command_out+=("--db-cluster-parameter-group-name" "$ENVOI_AMYSQL_PARAMETER_GROUP_NAME")
 fi
-
 
 # envoi-cloud-infrastructure aws database aws rds create-db-cluster --engine aurora-mysql
 # aws rds create-db-cluster \
@@ -139,5 +142,6 @@ fi
 #     --vpc-security-group-ids sg-0b9130572daf3dc16
 
 # https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_SettingUp_Aurora.html
-
+log "Creating Aurora MySQL cluster..."
+verbose "Running command: aws ${command_out[@]}"
 ${command_out[@]}

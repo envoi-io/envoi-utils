@@ -40,7 +40,7 @@ export ENVOI_S3_MEETING_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-meeting
 export ENVOI_S3_SCHEDULER_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-scheduler-wui
 export ENVOI_S3_CHANNEL_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-channel-wui
 export ENVOI_S3_TRANSFER_SERVER_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-transfer-service-wui
-export ENVOI_S3_MEDIAEDGE_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-media-edge-wui
+export ENVOI_S3_MEDIA_EDGE_BUCKET_NAME=${ENVOI_ENVOI_S3_BUCKET_NAME_PREFIX}-media-edge-wui
 
 aws s3api create-bucket --bucket ${ENVOI_S3_SOURCE_BUCKET_NAME}
 aws s3api create-bucket --bucket ${ENVOI_S3_PROXIES_BUCKET_NAME}
@@ -53,4 +53,4 @@ aws s3api create-bucket --bucket ${ENVOI_S3_MEETING_BUCKET_NAME}
 aws s3api create-bucket --bucket ${ENVOI_S3_SCHEDULER_BUCKET_NAME}
 aws s3api create-bucket --bucket ${ENVOI_S3_CHANNEL_BUCKET_NAME}
 aws s3api create-bucket --bucket ${ENVOI_S3_TRANSFER_SERVER_BUCKET_NAME}
-aws s3api create-bucket --bucket ${ENVOI_S3_MEDIAEDGE_BUCKET_NAME}
+aws s3api create-bucket --bucket ${ENVOI_S3_MEDIA_EDGE_BUCKET_NAME}
